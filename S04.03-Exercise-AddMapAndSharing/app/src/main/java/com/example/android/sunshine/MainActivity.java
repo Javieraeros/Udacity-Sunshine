@@ -214,15 +214,28 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        boolean result;
+        switch (id){
+            case R.id.action_refresh:
+                mForecastAdapter.setWeatherData(null);
+                loadWeatherData();
+                result=true;
+                break;
 
-        if (id == R.id.action_refresh) {
-            mForecastAdapter.setWeatherData(null);
-            loadWeatherData();
-            return true;
+            case R.id.action_map:
+                String location=SunshinePreferences.getPreferredWeatherLocation(this);
+                Uri locationUri=Uri.parse("geo:"+location);
+                Intent mapIntent=new Intent(Intent.ACTION_VIEW,locationUri);
+                startActivity(mapIntent);
+                result=true;
+                break;
+            default:
+                result=false;
+                break;
         }
 
         // TODO (2) Launch the map when the map menu item is clicked
 
-        return super.onOptionsItemSelected(item);
+        return result;
     }
 }
